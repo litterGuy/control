@@ -1,0 +1,151 @@
+package rules;
+dialect  "mvel"
+
+import com.xinshang.control.model.Operation
+import com.xinshang.control.service.OperationService
+import com.xinshang.control.utils.RulesUtil
+import org.apache.commons.lang3.StringUtils
+
+global OperationService operationService
+
+//距离常用登陆地过远
+rule "address far"
+when
+    operation : Operation( operationService.isFar(operation) )
+then
+    RulesUtil.addScore(operation);
+end
+
+//新地点登录
+rule "new address"
+when
+    operation : Operation(  operationService.isNewAddr(operation,StringUtils.join("{'site':'",operation.getSite(),"'}")) )
+then
+	RulesUtil.addScore(operation);
+end
+
+//ip没有地址信息，大概率为无效ip
+rule "xuni ip null address"
+when
+    operation : Operation(  StringUtils.isEmpty(operation.getSite()) )
+then
+	RulesUtil.addScore(operation,30);
+end
+
+//ip半小时改变三次
+rule "ip change"
+when
+    operation : Operation( operationService.isNewAddr(operation,StringUtils.join("{'ip':'",operation.getIp(),"'}")) )
+then
+	RulesUtil.addScore(operation);
+	operationService.setIpcTime(operation);
+	if(operationService.judgeIpcNum(operation)){
+	    RulesUtil.addScore(operation,100);
+	}
+	//时间小于一分钟ip更换，且为新ip
+	if(operationService.judgeIpNew(operation)){
+	    RulesUtil.addScore(operation,100);
+	}
+end
+
+//新手机操作
+rule "imei change"
+when
+    operation : Operation( operationService.isNewAddr(operation,StringUtils.join("{'imei':'",operation.getImei(),"'}")) )
+then
+	RulesUtil.addScore(operation);
+end
+
+//wifi更换
+rule "wifi change"
+when
+    operation : Operation( operationService.isNewAddr(operation,StringUtils.join("{'wifiMac':'",operation.getWifiMac(),"'}")) )
+then
+	RulesUtil.addScore(operation);
+end
+
+//新mac操作
+rule "mac change"
+when
+    operation : Operation( operationService.isNewAddr(operation,StringUtils.join("{'mac':'",operation.getMac(),"'}")) )
+then
+	RulesUtil.addScore(operation);
+end
+
+//新设备类型
+rule "new device type"
+when
+    operation : Operation( operationService.isNewAddr(operation,StringUtils.join("{'deviceType':'",operation.getDeviceType(),"'}")) )
+then
+	RulesUtil.addScore(operation);
+end
+
+//不是常用设备类型
+rule "not often device"
+when
+    operation : Operation( operation.getDeviceType()!=operationService.findOftenDevice(operation.getAccountId()) )
+then
+	RulesUtil.addScore(operation);
+end
+
+//不是常用ip
+rule "not often ip"
+when
+    operation : Operation( !operationService.judgeOftenIp(operation) )
+then
+	RulesUtil.addScore(operation);
+end
+
+//国外操作
+rule "not in china"
+when
+    operation : Operation( operation.getIsCh() =="no" )
+then
+	RulesUtil.addScore(operation,30);
+end
+
+//密码修改
+rule "pwd change"
+when
+    operation : Operation( operationService.isNewAddr(operation,StringUtils.join("{'hashedPassword':'",operation.getHashedPassword(),"'}")) )
+then
+	RulesUtil.addScore(operation,20);
+end
+
+//下半夜操作
+rule "action in night"
+when
+    operation : Operation( RulesUtil.isNight(operation.getOperateTime()) )
+then
+    RulesUtil.addScore(operation,20);
+end
+
+//登录失败次数过多
+rule "login fail a lot"
+when
+    operation : Operation( operation.getLoginResult()=="no" )
+then
+	RulesUtil.addScore(operation);
+	operationService.setFailTime(operation);
+	if(operationService.judgeFailNum(operation)){
+		RulesUtil.addScore(operation,100);
+	}
+end
+
+//refer校验
+rule "refer valid"
+when
+    operation : Operation( RulesUtil.validRefer(operation.getRefer()) )
+then
+    RulesUtil.addScore(operation,50);
+end
+
+//操作行为校验
+rule "operation valid"
+when
+    operation : Operation( operationService.validOperation(operation) )
+then
+    RulesUtil.addScore(operation,20);
+end
+
+

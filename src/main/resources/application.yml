@@ -1,0 +1,37 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: control
+  datasource:
+    url: jdbc:mysql://localhost:3306/fk?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
+    username: root
+    password: 123456
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+    jackson:
+      date-format: yyyy-MM-dd HH:mm:ss
+      serialization:
+        fail-on-empty-beans:  false
+
+  jpa:
+    show-sql: true
+
+  redis:
+    database: 0
+    password:
+    host: 127.0.0.1
+    port: 6379
+    lettuce:
+      pool:
+        min-idle: 5
+        max-idle: 10
+        max-active: 8
+        max-wait: 1ms
+      shutdown-timeout: 100ms
+
+logging:
+  level:
+    root: info
+  path: .
