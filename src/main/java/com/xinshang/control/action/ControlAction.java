@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("control")
@@ -27,6 +29,12 @@ public class ControlAction {
         Operation operation = BeanConvertUtil.map2Bean(request.getParameterMap(), Operation.class);
         operationChecker.checkParam(operation);
         service.riskControl(user, operation);
-        return operation.getScore() + "分";
+
+        Map<String, Object> rst = new HashMap<String, Object>() {{
+            put("score", operation.getScore());
+            //TODO 随后确认该值是否合适
+            put("risk", Integer.parseInt(operation.getScore()) > 60 ? true : false);
+        }};
+        return rst;
     }
 }
