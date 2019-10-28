@@ -33,7 +33,7 @@ public class ControlAction {
         Map<String, Object> rst = new HashMap<String, Object>() {{
             put("score", operation.getScore());
             //TODO 随后确认该值是否合适
-            put("risk", Integer.parseInt(operation.getScore()) > 60 ? true : false);
+            put("risk", Integer.parseInt(operation.getScore()) > 70 ? true : false);
         }};
         return rst;
     }
