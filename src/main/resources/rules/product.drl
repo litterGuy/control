@@ -122,6 +122,7 @@ end
 
 //登录失败次数过多
 rule "login fail a lot"
+enabled false
 when
     operation : Operation( operation.getLoginResult()=="no" )
 then
