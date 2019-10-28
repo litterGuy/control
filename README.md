@@ -60,7 +60,10 @@
  **返回结果**
  
      {
-         data: "150分",
-         errCode: 0,
-         errMsg: "successful"
+     data: {
+         score: "150",
+         risk: true
+     },
+     errCode: 0,
+     errMsg: "successful"
      }
