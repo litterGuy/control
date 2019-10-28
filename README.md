@@ -46,13 +46,13 @@
  | mac | string | N | mac地址 |
  | operateSource | string | N | 操作来源1、PC 2、H5 3、App |
  | appVersion | string | N | app版本 |
- | userNameType | string | N | 用户名类型 |
+ | ~~userNameType~~ | string | N | 用户名类型 |
  | registerTime | long | N | 注册时间(时间戳) |
  | loginType | string | N | 登录类型 |
  | registerIp | string | N | 注册ip |
- | loginResult | string | N | 登录结果 |
+ | ~~loginResult~~ | string | N | 登录结果 |
  | hashedPassword | string | N | hash后的密码 |
- | failReason | string | N | 失败原因 |
+ | ~~failReason~~ | string | N | 失败原因 |
  | imsi | string | N | imsi |
  | imei | string | N | imei |
  | wifiMac | string | N | wifi mac |

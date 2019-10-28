@@ -23,13 +23,13 @@ public class Operation {
     private String deviceType;
     private String ip;
     private String site;
-    private String userNameType;
+    private String userNameType;//未使用字段
     private String registerTime;
     private String loginType;
     private String registerIp;
-    private String loginResult;
+    private String loginResult;//未使用字段
     private String hashedPassword;
-    private String failReason;
+    private String failReason;//未使用字段
     private String imsi;
     private String imei;
     private String wifiMac;
