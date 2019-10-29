@@ -1,8 +1,7 @@
 package com.xinshang.control.utils.constant;
 
 /**
- * 物业常量
- * TODO 部分常量定义需要再约定后调整
+ * 业务常量
  */
 public interface ControlConstant {
     /**
