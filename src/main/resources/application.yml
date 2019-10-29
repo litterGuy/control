@@ -18,6 +18,10 @@ spring:
   jpa:
     show-sql: true
 
+  profiles:
+    active: dev
+
+
   redis:
     database: 0
     password:
