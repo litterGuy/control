@@ -1,5 +1,6 @@
 # control
  利用drools做风控处理
+ 
  **接口描述**
      根据请求传递的参数对用户操作进行风险评分
  
@@ -37,7 +38,7 @@
  | :--- | :------- | :------- | :------- |
  | accountId | int | Y | 用户id |
  | ip | string | Y | 用户ip |
- | operationType | string | Y | 操作类型 |
+ | operationType | string | Y | 操作类型 提币：0；提现：1；交易：2；其他往后递加|
  | deviceType | int | Y | 设备类型1、PC 2、MOBILE |
  | dollar | double | N | 操作金额（若操作类型是提币或提现，该参数必传） |
  | operateTime | long | N | 操作时间(时间戳) |
