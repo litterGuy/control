@@ -57,7 +57,7 @@ CREATE TABLE `operation` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '唯一id',
   `account_id` varchar(50) COLLATE utf8_bin NOT NULL COMMENT '用户id',
   `operate_time` varchar(50) COLLATE utf8_bin NOT NULL COMMENT '操作时间',
-  `user_agent` varchar(50) COLLATE utf8_bin DEFAULT NULL COMMENT 'http请求所带的userAgent',
+  `user_agent` varchar(1024) COLLATE utf8_bin DEFAULT NULL COMMENT 'http请求所带的userAgent',
   `refer` varchar(50) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL COMMENT 'http请求所带的refer，算是起始网址',
   `mac` varchar(20) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL COMMENT 'mac地址',
   `operate_source` varchar(10) COLLATE utf8_bin DEFAULT NULL COMMENT '操作来源1、PC 2、H5 3、App',
