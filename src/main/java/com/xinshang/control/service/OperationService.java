@@ -188,10 +188,10 @@ public class OperationService {
             case ControlConstant.OPERATOR_COIN:
                 //是否超过最大金额
                 if (StringUtils.isNotEmpty(operation.getDollar())) {
-                    Double dollar = Double.parseDouble(operation.getDollar());
-                    if (JudgeInterceptor.base.getDollerlimit() > 0 && dollar > JudgeInterceptor.base.getDollerlimit()) {
-                        RulesUtil.addScore(operation, 100);
-                    }
+//                    Double dollar = Double.parseDouble(operation.getDollar());
+//                    if (JudgeInterceptor.base.getDollerlimit() > 0 && dollar > JudgeInterceptor.base.getDollerlimit()) {
+//                        RulesUtil.addScore(operation, 100);
+//                    }
                     //是否操作次数超标
                     if (this.validOperaterNum(operation.getAccountId(), operation.getOperationType())) {
                         RulesUtil.addScore(operation, 100);
