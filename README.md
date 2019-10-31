@@ -57,6 +57,7 @@
  | imsi | string | N | imsi |
  | imei | string | N | imei |
  | wifiMac | string | N | wifi mac |
+ | identity | string | N | 用户进行了身份验证，只进行交易风控 0:没有；1：认证 |
  
  **返回结果**
  
