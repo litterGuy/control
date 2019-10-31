@@ -10,6 +10,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.drools.core.event.DefaultAgendaEventListener;
 import org.kie.api.event.rule.AfterMatchFiredEvent;
 import org.kie.api.event.rule.AgendaEventListener;
+import org.kie.api.event.rule.MatchCreatedEvent;
 import org.kie.api.runtime.KieSession;
 import org.kie.api.runtime.rule.FactHandle;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -62,6 +63,7 @@ public class ControlService {
             operation.setIsCh("no");
         }
 
+
         //最近一次登录ip存入redis
         operationService.setLastIpAndTime(operation);
         operationService.insert(operation);
@@ -72,6 +74,7 @@ public class ControlService {
         Collection<AgendaEventListener> eventListeners = kieSession.getAgendaEventListeners();
         if (eventListeners.size() == 0) {
             kieSession.addEventListener(new DefaultAgendaEventListener() {
+
                 public void afterMatchFired(AfterMatchFiredEvent event) {
                     super.afterMatchFired(event);
                     log.info("use rule is: {}", event.getMatch().getRule().getName());
@@ -80,7 +83,21 @@ public class ControlService {
         }
 
         FactHandle userHandle = kieSession.insert(user);
-        FactHandle operationHandle = kieSession.insert(operation);
+        Operation riskOperation = new Operation();
+        //检验用户是否进行过身份校验
+        if (StringUtils.isNotEmpty(operation.getIdentity()) && operation.getIdentity().equals("1")) {
+            operationService.setIdentityFlag(operation);
+        }
+        if (operationService.hasIdentityFlag(operation)) {
+            //如果有身份校验，只计算交易的风控，其他不计算
+            riskOperation.setAccountId(operation.getAccountId());
+            riskOperation.setOperationType(operation.getOperationType());
+            riskOperation.setDollar(operation.getDollar());
+            riskOperation.setId(operation.getId());
+        }else{
+            riskOperation = operation;
+        }
+        FactHandle operationHandle = kieSession.insert(riskOperation);
         int ruleFiredCount = kieSession.fireAllRules();
 
         kieSession.delete(userHandle);

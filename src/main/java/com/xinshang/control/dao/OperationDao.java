@@ -2,8 +2,10 @@ package com.xinshang.control.dao;
 
 import com.xinshang.control.model.Operation;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 public interface OperationDao extends JpaRepository<Operation, Integer> {
@@ -16,4 +18,9 @@ public interface OperationDao extends JpaRepository<Operation, Integer> {
     int countByAccountIdAndOperationTypeAndOperateTimeBetween(String accountId, String operationType, String startTime, String endTime);
 
     int countByAccountId(String accountId);
+
+    @Modifying
+    @Transactional
+    @Query("update Operation set score = ?2 where id = ?1")
+    int updateScoreById(int id, String score);
 }

@@ -70,7 +70,7 @@ CREATE TABLE `operation` (
   `login_type` varchar(10) COLLATE utf8_bin DEFAULT NULL COMMENT '登录类型',
   `register_ip` varchar(50) COLLATE utf8_bin DEFAULT NULL COMMENT '注册ip',
   `login_result` varchar(10) COLLATE utf8_bin DEFAULT NULL COMMENT '登录结果',
-  `hashed_password` varchar(127) COLLATE utf8_bin NOT NULL COMMENT 'hash后的密码',
+  `hashed_password` varchar(127) COLLATE utf8_bin DEFAULT NULL COMMENT 'hash后的密码',
   `fail_reason` varchar(50) COLLATE utf8_bin DEFAULT NULL COMMENT '失败原因',
   `imsi` varchar(50) COLLATE utf8_bin DEFAULT NULL COMMENT 'imsi',
   `imei` varchar(50) COLLATE utf8_bin DEFAULT NULL,
@@ -81,6 +81,7 @@ CREATE TABLE `operation` (
   `score` varchar(10) COLLATE utf8_bin DEFAULT NULL COMMENT '安全得分',
   `dollar` varchar(255) COLLATE utf8_bin DEFAULT NULL COMMENT '美金额',
   `is_ch` varchar(10) COLLATE utf8_bin DEFAULT NULL COMMENT '是否国内',
+  `identity` varchar(2) COLLATE utf8_bin DEFAULT '0' COMMENT '用户进行了身份验证，只进行交易风控 0:没有；1：认证',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=309 DEFAULT CHARSET=utf8 COLLATE=utf8_bin ROW_FORMAT=DYNAMIC;
 

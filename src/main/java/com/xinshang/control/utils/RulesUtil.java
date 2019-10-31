@@ -35,6 +35,9 @@ public class RulesUtil {
      * @return
      */
     public static boolean isNight(String nowTime) {
+        if (StringUtils.isEmpty(nowTime)) {
+            return false;
+        }
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
         String strDate = sdf.format(new Date(Long.parseLong(nowTime))); // 2016-12-16 11:53:54
         // 截取当前时间时分秒 转成整型
@@ -62,6 +65,9 @@ public class RulesUtil {
             return false;
         }
         String orignRefer = JudgeInterceptor.base.getRefer();
+        if (StringUtils.isEmpty(orignRefer)) {
+            return false;
+        }
         if (refer.contains(orignRefer)) {
             return false;
         }

@@ -27,7 +27,7 @@ end
 //ip没有地址信息，大概率为无效ip
 rule "xuni ip null address"
 when
-    operation : Operation(  StringUtils.isEmpty(operation.getSite()) )
+    operation : Operation(  operationService.isNullSite(operation) )
 then
 	RulesUtil.addScore(operation,30);
 end
@@ -83,7 +83,7 @@ end
 //不是常用设备类型
 rule "not often device"
 when
-    operation : Operation( operation.getDeviceType()!=operationService.findOftenDevice(operation.getAccountId()) )
+    operation : Operation( operationService.isOftenDevice(operation) )
 then
 	RulesUtil.addScore(operation);
 end

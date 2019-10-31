@@ -50,6 +50,21 @@ public class OperationService {
         return Long.parseLong(time);
     }
 
+    /**
+     * 设置身份验证的风控值
+     *
+     * @param operation
+     */
+    public void setIdentityFlag(Operation operation) {
+        String key = "identity_" + operation.getAccountId();
+        redisTemplate.opsForValue().set(key, 0, 3600, TimeUnit.SECONDS);
+    }
+
+    public boolean hasIdentityFlag(Operation operation) {
+        String key = "identity_" + operation.getAccountId();
+        return redisTemplate.hasKey(key);
+    }
+
     public void setIpcTime(Operation operation) {
         //一小时过期
         redisTemplate.opsForList().rightPushAll(operation.getAccountId() + ":ipc", Arrays.asList(operation.getOperateTime()), 3600, TimeUnit.SECONDS);
@@ -90,6 +105,10 @@ public class OperationService {
         return true;
     }
 
+    public void updateScoreById(int id, String score) {
+        dao.updateScoreById(id, score);
+    }
+
     /**
      * 判断距离是否过远
      *
@@ -97,6 +116,9 @@ public class OperationService {
      * @return
      */
     public boolean isFar(Operation operation) {
+        if (StringUtils.isEmpty(operation.getSite())) {
+            return false;
+        }
         int distance = JudgeInterceptor.base.getDistance();
         int oftensite = JudgeInterceptor.base.getOftensite();
 
@@ -158,6 +180,9 @@ public class OperationService {
     }
 
     public boolean judgeOftenIp(Operation operation) {
+        if (StringUtils.isEmpty(operation.getIp())) {
+            return true;
+        }
         int oftenip = JudgeInterceptor.base.getIpntime();
         List<String> ips = dao.getOftenIpNum(operation.getAccountId(), oftenip);
         for (String str : ips) {
@@ -176,6 +201,20 @@ public class OperationService {
         return deviceType;
     }
 
+    public boolean isOftenDevice(Operation operation) {
+        if (this.hasIdentityFlag(operation)) {
+            return false;
+        }
+        return !operation.getDeviceType().equals(this.findOftenDevice(operation.getAccountId()));
+    }
+
+    public boolean isNullSite(Operation operation) {
+        if (this.hasIdentityFlag(operation)) {
+            return false;
+        }
+        return StringUtils.isEmpty(operation.getSite());
+    }
+
     /**
      * 对行为进行校验
      *
@@ -183,6 +222,9 @@ public class OperationService {
      * @return
      */
     public boolean validOperation(Operation operation) {
+        if (StringUtils.isEmpty(operation.getOperationType())) {
+            return false;
+        }
         boolean flag = true;
         switch (operation.getOperationType()) {
             case ControlConstant.OPERATOR_COIN:

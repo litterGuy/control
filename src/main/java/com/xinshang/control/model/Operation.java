@@ -1,11 +1,9 @@
 package com.xinshang.control.model;
 
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Data
 @Entity
@@ -39,4 +37,5 @@ public class Operation {
     private String score;
     private String dollar;
     private String isCh;
+    private String identity;//用户进行了身份验证，只进行交易风控
 }
