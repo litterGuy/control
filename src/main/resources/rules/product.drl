@@ -104,20 +104,20 @@ then
 	RulesUtil.addScore(operation,30);
 end
 
-//密码修改
-rule "pwd change"
-when
-    operation : Operation( operationService.isNewAddr(operation,StringUtils.join("{'hashedPassword':'",operation.getHashedPassword(),"'}")) )
-then
-	RulesUtil.addScore(operation,20);
-end
-
 //下半夜操作
 rule "action in night"
 when
     operation : Operation( RulesUtil.isNight(operation.getOperateTime()) )
 then
     RulesUtil.addScore(operation,20);
+end
+
+//密码修改
+rule "pwd change"
+when
+    operation : Operation( operationService.isNewAddr(operation,StringUtils.join("{'hashedPassword':'",operation.getHashedPassword(),"'}")) )
+then
+	RulesUtil.addScore(operation,20);
 end
 
 //登录失败次数过多

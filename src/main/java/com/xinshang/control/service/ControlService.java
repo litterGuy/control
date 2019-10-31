@@ -7,11 +7,16 @@ import com.xinshang.control.utils.BeanConvertUtil;
 import com.xinshang.control.utils.IpUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.drools.core.event.DefaultAgendaEventListener;
+import org.kie.api.event.rule.AfterMatchFiredEvent;
+import org.kie.api.event.rule.AgendaEventListener;
 import org.kie.api.runtime.KieSession;
+import org.kie.api.runtime.rule.FactHandle;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.Collection;
 import java.util.Date;
 
 @Service
@@ -62,9 +67,24 @@ public class ControlService {
         operationService.insert(operation);
 
         kieSession.setGlobal("operationService", operationService);
-        kieSession.insert(user);
-        kieSession.insert(operation);
+
+        //设置监听，在规则匹配后打印
+        Collection<AgendaEventListener> eventListeners = kieSession.getAgendaEventListeners();
+        if (eventListeners.size() == 0) {
+            kieSession.addEventListener(new DefaultAgendaEventListener() {
+                public void afterMatchFired(AfterMatchFiredEvent event) {
+                    super.afterMatchFired(event);
+                    log.info("use rule is: {}", event.getMatch().getRule().getName());
+                }
+            });
+        }
+
+        FactHandle userHandle = kieSession.insert(user);
+        FactHandle operationHandle = kieSession.insert(operation);
         int ruleFiredCount = kieSession.fireAllRules();
+
+        kieSession.delete(userHandle);
+        kieSession.delete(operationHandle);
         log.info("use rule num is " + ruleFiredCount);
 //        kieSession.dispose();
     }
