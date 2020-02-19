@@ -47,7 +47,7 @@ public class IpUtils {
         } catch (UnsupportedEncodingException e1) {
             e1.printStackTrace();
         }
-        String url = String.format("http://api.map.baidu.com/location/ip?ak=F454f8a5efe5e577997931cc01de3974&ip=%s", address);
+        String url = String.format("http://api.map.baidu.com/location/ip?ak=AEae92ac30aa25f0a53f4d72960af92a&ip=%s", address);
         URL myURL = null;
         URLConnection httpsConn = null;
         try {
