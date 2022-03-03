@@ -1,0 +1,37 @@
+<config>
+    <!-- cs-xxxxxx-compile 原编译的jar文件，cs-xxxxxx 混淆后的输出的jar文件 -->
+    <input>
+        <jar in="../../../target/control-0.0.1-SNAPSHOT.jar" out="../../../target/control-allatori-0.0.1-SNAPSHOT.jar"/>
+    </input>
+    <!-- 不替换类名、方法名、属性名 -->
+    <keep-names>
+        <class access="protected+">
+            <field access="private+"/>
+            <method access="protected+"/>
+        </class>
+    </keep-names>
+    <!-- 接口形参名保持不变 -->
+    <property name="local-variables-naming" value="keep-parameters"/>
+    <!-- 排除（不做代码混淆）-->
+    <ignore-classes>
+        <!-- 排除指定路径 -->
+        <!--<class template="class  com.caxs.warn.config.*"/>-->
+        <!-- 排除启动类 -->
+        <class template="class  com.xinshang.control.ControlApplication"/>
+<!--        <class template="class  com.xinshang.control.dao*"/>-->
+<!--        <class template="class  com.xinshang.control.**.model*"/>-->
+        <!-- 排除springboot依赖文件（springboot构建的项目需要排除，否则业务程序会报错） -->
+        <class template="class  *springframework*"/>
+        <class template="class  *netty*"/>
+        <class template="class  com.alibaba.dubbo**"/>
+        <class template="class  org.springframework.core.io.ClassPathResource"/>
+    </ignore-classes>
+    <!-- 广泛流混淆 最大级别混淆-->
+    <!--<property name="extensive-flow-obfuscation" value="maximum" apply2class="class com.caxs.warn.*"/>-->
+    <!-- 其他路径正常混淆 -->
+    <!--<property name="extensive-flow-obfuscation" value="normal"/>-->
+    <!-- 到期时间(到期后无法启动jar) 格式：yyyy/mm/dd-->
+    <expiry date="2022/06/15" string="EXPIRED!"/>
+    <!-- 随机命名混淆字符-->
+    <property name="random-seed" value="cshxzf jrncbd hh"/>
+</config>
