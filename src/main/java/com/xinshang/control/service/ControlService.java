@@ -53,6 +53,10 @@ public class ControlService {
         } else {
             operation.setOperateTime(System.currentTimeMillis() + "");
         }
+        // 2022-03-04 08:18:34 Column 'hashed_password' cannot be null
+        if(StringUtils.isEmpty(operation.getHashedPassword())){
+            operation.setHashedPassword("");
+        }
 
         //获取操作地点、判断是否为中国
         String site = ipaddressService.getAddr(operation.getIp());
